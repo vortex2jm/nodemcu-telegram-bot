@@ -22,7 +22,6 @@ void ClevBot::wifi_connect(String ssid, String password)
 	}
 	Serial.println();
 	Serial.println("Wifi connected");
-	this->status = "online";
 }
 
 //=====================================//

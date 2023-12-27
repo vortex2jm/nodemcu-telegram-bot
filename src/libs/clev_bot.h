@@ -9,7 +9,7 @@ class ClevBot
 private:
 	HTTPClient http;
 	WiFiClientSecure wifiClient;
-	int ClevBot::request_get(String url, String &payload);
+	int request_get(String url, String &payload);
 
 public:
 	ClevBot();
