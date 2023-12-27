@@ -5,7 +5,10 @@
 #define CEP_URL "https://cep.awesomeapi.com.br/json/"
 
 //======================================//
-ClevBot::ClevBot() : http(), wifiClient()
+ClevBot::ClevBot(String token) : 
+	http(),
+	wifiClient(),
+	t_bot(token, wifiClient)
 {
 	this->wifiClient.setInsecure(); // Avoid verifying SSL
 }
@@ -83,4 +86,25 @@ int ClevBot::test_wifi_connection()
 	if (WiFi.status() != WL_CONNECTED)
 		return 0;
 	return 1;
+}
+
+//=================================//
+void ClevBot::set_chat_id(String id)
+{
+	this->chat_id = id;
+}
+
+void ClevBot::test_receive()
+{
+	int msg_amount = t_bot.getUpdates(t_bot.last_message_received + 1);
+	Serial.println("Entrei na função");
+	Serial.println(msg_amount);
+	
+	while(msg_amount){
+		Serial.println("got response");
+		for(int x=0; x<msg_amount; x++){
+			t_bot.sendMessage(t_bot.messages[x].chat_id, t_bot.messages[x].text, "");
+		}
+		msg_amount = t_bot.getUpdates(t_bot.last_message_received + 1);
+	}
 }
