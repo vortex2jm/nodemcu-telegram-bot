@@ -5,6 +5,7 @@
 #include <ESP8266HTTPClient.h>
 #include <UniversalTelegramBot.h>
 
+//======================//
 class ClevBot
 {
 private:
@@ -21,6 +22,9 @@ public:
 	void search_address(String cep);
 	void wifi_connect(String ssid, String password);
 	void test_receive();
+	bool got_new_message(String &msg);
+	void send_message(String msg);
+	void send_start_message();
 };
 
 #endif

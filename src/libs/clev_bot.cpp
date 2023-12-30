@@ -5,10 +5,9 @@
 #define CEP_URL "https://cep.awesomeapi.com.br/json/"
 
 //======================================//
-ClevBot::ClevBot(String token) : 
-	http(),
-	wifiClient(),
-	t_bot(token, wifiClient)
+ClevBot::ClevBot(String token) : http(),
+																 wifiClient(),
+																 t_bot(token, wifiClient)
 {
 	this->wifiClient.setInsecure(); // Avoid verifying SSL
 }
@@ -94,17 +93,51 @@ void ClevBot::set_chat_id(String id)
 	this->chat_id = id;
 }
 
+//==========================//
 void ClevBot::test_receive()
 {
 	int msg_amount = t_bot.getUpdates(t_bot.last_message_received + 1);
 	Serial.println("Entrei na função");
 	Serial.println(msg_amount);
-	
-	while(msg_amount){
+
+	while (msg_amount)
+	{
 		Serial.println("got response");
-		for(int x=0; x<msg_amount; x++){
+		for (int x = 0; x < msg_amount; x++)
+		{
 			t_bot.sendMessage(t_bot.messages[x].chat_id, t_bot.messages[x].text, "");
 		}
 		msg_amount = t_bot.getUpdates(t_bot.last_message_received + 1);
 	}
+}
+
+//=======================================//
+bool ClevBot::got_new_message(String &msg)
+{
+	int msg_amount = t_bot.getUpdates(t_bot.last_message_received + 1);
+	Serial.println(msg_amount);
+	if (msg_amount)
+	{
+		if (this->chat_id == "" || this->chat_id == t_bot.messages[0].chat_id)
+		{
+			msg = t_bot.messages[0].text;
+			return true;
+		}
+	}
+	return false;
+}
+
+//====================================//
+void ClevBot::send_message(String msg)
+{
+	t_bot.sendMessage(this->chat_id, msg, "");
+}
+
+//====================================//
+void ClevBot::send_start_message()
+{
+	String msg;
+	msg = "Hello, my name's Clev and bellow are the commands you can use here!\n\n";
+	msg += "/cep - It returns the address of the currently cep\n";	
+	t_bot.sendMessage(this->chat_id, msg, "");
 }

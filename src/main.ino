@@ -6,7 +6,8 @@
 #define CHAT_ID ""
 
 String cep = "29075910";
-
+String message = "",
+String last_message = "";
 int flag = 0;
 ClevBot bot(TELEGRAM_TOKEN);
 
@@ -20,12 +21,21 @@ void setup()
 
 void loop()
 {
-	Serial.println("Testing");
-	delay(100);
-	if(!flag){
-		bot.search_address(cep);
-		flag = 1;
+  Serial.println("Testing");
+  delay(100);
+
+	if(last_message == "/start"){
+		Serial.println("Coro e coça");
+		last_message = "";
 	}
-	bot.test_receive();
-	delay(1000);
+
+  if (bot.got_new_message(message))
+  {
+    Serial.println(message);
+    if(message == "/start"){
+      bot.send_start_message();
+			last_message = "/start";
+    }
+  }
+  delay(500);
 }
